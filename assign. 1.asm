@@ -1,0 +1,63 @@
+.model small
+.stack 100h
+.data
+num1 dw 5          ; first number
+num2 dw 3          ; second number
+result dw ?        ; store result of addition
+arr dw 10          ; simple memory variable
+.code
+main proc
+
+    mov ax, @data
+    mov ds, ax          ; initialize data segment
+
+    ; AX - arithmetic
+    mov ax, num1        ; load 5 into AX
+    add ax, num2        ; AX = 5 + 3
+    mov result, ax      ; store 8 into result
+
+    ; BX - temporary storage
+    mov bx, 7           ; store 7 in BX
+
+    ; CX - loop counter
+    mov cx, 2           ; set loop counter to 2
+loop_here:
+    nop                 ; do nothing
+    loop loop_here      ; decrease CX and repeat until CX=0
+
+    ; DX - multiplication
+    mov ax, 4           ; load 4 into AX
+    mov dx, 0           ; clear DX before multiplication
+    mov bx, 2           ; load 2 into BX
+    mul bx              ; multiply AX*BX -> AX = 8
+
+    ; SI - read from memory
+    mov si, offset arr  ; load address of arr into SI
+    mov ax, [si]        ; read value 10 from arr into AX
+
+    ; DI - write to memory
+    mov di, offset arr  ; load address of arr into DI
+    mov [di], 99        ; write 99 into arr
+
+    ; SP - stack pointer
+    push ax             ; push AX value onto stack
+    pop bx              ; pop top of stack into BX
+
+    ; BP - access stack data
+    push ax             ; push AX onto stack
+    mov bp, sp          ; copy SP to BP
+    mov ax, [bp]        ; read value from stack into AX
+    pop ax              ; remove top of stack
+
+    ; FLAGS - comparison
+    cmp ax, 8           ; compare AX with 8, sets Zero Flag
+    je equal_label      ; jump to equal_label if AX=8
+
+    mov bx, 0           ; this line skipped if AX=8
+
+equal_label:
+    mov ah, 4ch         ; DOS terminate program
+    int 21h             ; interrupt to exit
+
+main endp
+end main

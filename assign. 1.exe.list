@@ -1,0 +1,119 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+assign. 1.exe -- emu8086 assembler version: 4.08  
+ 
+[ 2/23/2026  --  11:44:46 AM ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .model small
+[   2]        :                                       .stack 100h
+[   3]        :                                       .data
+[   4]    0100: 05 00                                 num1 dw 5          ; first number
+[   5]    0102: 03 00                                 num2 dw 3          ; second number
+[   6]    0104: 00 00                                 result dw ?        ; store result of addition
+[   7]    0106: 0A 00                                 arr dw 10          ; simple memory variable
+[   8]        :                                       .code
+[   9]    0110:                                       main proc
+[  10]        :                                       
+[  11]    0110: B8 10 00                              mov ax, @data
+[  12]    0113: 8E D8                                 mov ds, ax          ; initialize data segment
+[  13]        :                                       
+[  14]        :                                       ; AX - arithmetic
+[  15]    0115: A1 00 00                              mov ax, num1        ; load 5 into AX
+[  16]    0118: 03 06 02 00                           add ax, num2        ; AX = 5 + 3
+[  17]    011C: A3 04 00                              mov result, ax      ; store 8 into result
+[  18]        :                                       
+[  19]        :                                       ; BX - temporary storage
+[  20]    011F: BB 07 00                              mov bx, 7           ; store 7 in BX
+[  21]        :                                       
+[  22]        :                                       ; CX - loop counter
+[  23]    0122: B9 02 00                              mov cx, 2           ; set loop counter to 2
+[  24]    0125:                                       loop_here:
+[  25]    0125: 90                                    nop                 ; do nothing
+[  26]    0126: E2 FD                                 loop loop_here      ; decrease CX and repeat until CX=0
+[  27]        :                                       
+[  28]        :                                       ; DX - multiplication
+[  29]    0128: B8 04 00                              mov ax, 4           ; load 4 into AX
+[  30]    012B: BA 00 00                              mov dx, 0           ; clear DX before multiplication
+[  31]    012E: BB 02 00                              mov bx, 2           ; load 2 into BX
+[  32]    0131: F7 E3                                 mul bx              ; multiply AX*BX -> AX = 8
+[  33]        :                                       
+[  34]        :                                       ; SI - read from memory
+[  35]    0133: BE 06 00                              mov si, offset arr  ; load address of arr into SI
+[  36]    0136: 8B 04                                 mov ax, [si]        ; read value 10 from arr into AX
+[  37]        :                                       
+[  38]        :                                       ; DI - write to memory
+[  39]    0138: BF 06 00                              mov di, offset arr  ; load address of arr into DI
+[  40]    013B: C6 05 63                              mov [di], 99        ; write 99 into arr
+[  41]        :                                       
+[  42]        :                                       ; SP - stack pointer
+[  43]    013E: 50                                    push ax             ; push AX value onto stack
+[  44]    013F: 5B                                    pop bx              ; pop top of stack into BX
+[  45]        :                                       
+[  46]        :                                       ; BP - access stack data
+[  47]    0140: 50                                    push ax             ; push AX onto stack
+[  48]    0141: 8B EC                                 mov bp, sp          ; copy SP to BP
+[  49]    0143: 8B 46 00                              mov ax, [bp]        ; read value from stack into AX
+[  50]    0146: 58                                    pop ax              ; remove top of stack
+[  51]        :                                       
+[  52]        :                                       ; FLAGS - comparison
+[  53]    0147: 3D 08 00                              cmp ax, 8           ; compare AX with 8, sets Zero Flag
+[  54]    014A: 74 03                                 je equal_label      ; jump to equal_label if AX=8
+[  55]        :                                       
+[  56]    014C: BB 00 00                              mov bx, 0           ; this line skipped if AX=8
+[  57]        :                                       
+[  58]    014F:                                       equal_label:
+[  59]    014F: B4 4C                                 mov ah, 4ch         ; DOS terminate program
+[  60]    0151: CD 21                                 int 21h             ; interrupt to exit
+[  61]        :                                       
+[  62]        :                                       main endp
+[  63]        :                                       end main
+[  64]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 53      -   bytes on last page (l.byte)
+0003: 01      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: 96      -   check sum (l.byte)
+0013: 00      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 11      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 11      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================
